@@ -1,6 +1,26 @@
+import SideBar from "../layout/Sidebar";
+import Bar from "../layout/Bar";
+import TaskForm from "../tasks/TaskForm";
+import TasksList from "../tasks/TasksList";
+
 const Projects = () => {
     return (
-        <h1>From Projects</h1>
+        <div className="contenedor-app">
+            <SideBar />
+
+            <div className="seccion-principal">
+                <Bar />
+                
+                <main>
+                    <TaskForm />
+
+                    <div className="contenedor-tareas">
+                        <TasksList />
+                    </div>
+                </main>
+            </div>
+
+        </div>
     );
 }
  
