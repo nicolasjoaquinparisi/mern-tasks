@@ -1,9 +1,11 @@
 import {
     PROJECT_FORM,
-    GET_PROJECTS
+    GET_PROJECTS,
+    ADD_PROJECT,
+    FORM_ERROR
 } from "../../types";
 
-export default (state, action) => {
+const reducer = (state, action) => {
     switch (action.type) {
         case PROJECT_FORM:
             return {
@@ -15,7 +17,21 @@ export default (state, action) => {
                 ...state,
                 projects: action.payload
             }
+        case ADD_PROJECT:
+            return {
+                ...state,
+                projects: [...state.projects, action.payload],
+                form: false,
+                formError: false
+            }
+        case FORM_ERROR:
+            return {
+                ...state,
+                formError: true
+            }
         default:
             return state;
     }
 }
+
+export default reducer;

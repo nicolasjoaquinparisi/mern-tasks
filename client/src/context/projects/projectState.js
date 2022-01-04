@@ -1,9 +1,12 @@
 import { useReducer } from "react";
 import projectContext from "./projectContext";
-import projectReducer from "./projectReducer";
-import { 
+import reducer from "./projectReducer";
+import { v4 } from 'uuid';
+import {
     PROJECT_FORM,
-    GET_PROJECTS
+    GET_PROJECTS,
+    ADD_PROJECT,
+    FORM_ERROR
 } from '../../types';
 
 const ProjectState = props => {
@@ -14,13 +17,15 @@ const ProjectState = props => {
         { id: 3, name: 'Reactive Cookie' }
     ];
 
+    // Estado inicial de la aplicación
     const initialState = {
         projects: [],
-        form: false
+        form: false,
+        formError: false
     }
 
     // Dispatch para ejecutar las acciones
-    const [ state, dispatch ] = useReducer(projectReducer, initialState);
+    const [ state, dispatch ] = useReducer(reducer, initialState);
 
     // Funciones para el CRUD
     const showForm = () => {
@@ -36,14 +41,32 @@ const ProjectState = props => {
         })
     }
 
+    const addProject = project => {
+        project.id = v4();
+
+        dispatch({
+            type: ADD_PROJECT,
+            payload: project
+        })
+    }
+
+    const showError = () => {
+        dispatch({
+            type: FORM_ERROR
+        })
+    }
+
     return (
         <projectContext.Provider
             value={{
                 projects: state.projects,
                 form: state.form,
+                formError: state.formError,
 
-                showForm: showForm,
-                getProjects
+                showForm,
+                getProjects,
+                addProject,
+                showError
             }}
         >
             {props.children}
