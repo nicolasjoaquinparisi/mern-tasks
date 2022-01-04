@@ -2,7 +2,8 @@ import {
     PROJECT_FORM,
     GET_PROJECTS,
     ADD_PROJECT,
-    FORM_ERROR
+    FORM_ERROR,
+    CURRENT_PROJECT
 } from "../../types";
 
 const reducer = (state, action) => {
@@ -28,6 +29,11 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 formError: true
+            }
+        case CURRENT_PROJECT:
+            return {
+                ...state,
+                project: action.payload
             }
         default:
             return state;
