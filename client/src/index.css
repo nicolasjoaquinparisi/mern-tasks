@@ -184,8 +184,6 @@ aside  {
   padding: 4rem;
 }
 
-
-
 .listado-tareas {
   max-width: 600px;
   margin: 0 auto;
@@ -199,7 +197,6 @@ aside  {
   align-items: center;
   margin-bottom: 1rem;
   border-radius: .5rem;
-
 }
 .sombra {
   -webkit-box-shadow: 0px 4px 10px -3px rgba(117,117,117,1);
@@ -262,8 +259,6 @@ aside  {
   background-color: rgb(170, 0, 0);
   color: var(--blanco);
 }
-
-
 
 .tarea-enter,
 .proyecto-enter {

@@ -2,11 +2,12 @@ import {
     PROJECT_FORM,
     GET_PROJECTS,
     ADD_PROJECT,
-    FORM_ERROR,
-    CURRENT_PROJECT
+    PROJECT_ERROR,
+    CURRENT_PROJECT,
+    DELETE_PROJECT
 } from "../../types";
 
-const reducer = (state, action) => {
+const ProjectReducer = (state, action) => {
     switch (action.type) {
         case PROJECT_FORM:
             return {
@@ -25,7 +26,7 @@ const reducer = (state, action) => {
                 form: false,
                 formError: false
             }
-        case FORM_ERROR:
+        case PROJECT_ERROR:
             return {
                 ...state,
                 formError: true
@@ -35,9 +36,15 @@ const reducer = (state, action) => {
                 ...state,
                 project: action.payload
             }
+        case DELETE_PROJECT:
+            return {
+                ...state,
+                projects: state.projects.filter(project => project.id !== action.payload),
+                project: null
+            }
         default:
             return state;
     }
 }
 
-export default reducer;
+export default ProjectReducer;

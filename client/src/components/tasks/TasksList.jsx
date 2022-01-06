@@ -1,35 +1,53 @@
-import { Fragment } from 'react';
+import { Fragment, useContext } from 'react';
 import Task from './Task';
+import projectContext from '../../context/projects/projectContext';
+import TaskContext from '../../context/tasks/taskContext';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 const TasksList = () => {
 
-    const tasks = [
-        { name: 'Choose platform', state: true },
-        { name: 'Choose colors', state: false },
-        { name: 'Choose payment platforms', state: false },
-        { name: 'Choose Hosting', state: true }
-    ]
+    const { project, deleteProject } = useContext(projectContext);
+    const { projectTasks } = useContext(TaskContext);
+
+    if (!project) return <h2>Select a Project</h2>
+
+    const handleClick = () => {
+        deleteProject(project.id);
+    }
 
     return (
         <Fragment>
-            <h2>Project: E-Commerce</h2>
+            <h2>Project: {project.name}</h2>
 
             <ul className="listado-tareas">
                 {
-                    tasks.length === 0 ?
+                    projectTasks.length === 0 ?
                     <li className="tarea">There are no tasks</li>
                     :
-                    tasks.map(task => (
-                        <Task
-                            task={task}
-                        />
-                    ))
+                    <TransitionGroup
+                        className="todo-list"
+                    >
+                    {
+                        projectTasks.map(task => (
+                            <CSSTransition
+                                key={task.id}
+                                timeout={200}
+                                className="tarea"
+                            >
+                                <Task
+                                    task={task}
+                                />
+                            </CSSTransition>
+                        ))
+                    }
+                    </TransitionGroup>
                 }
             </ul>
 
             <button
                 type="button"
                 className="btn btn-eliminar"
+                onClick={ () => { handleClick() }}
             >
                 Delete Project &times;
             </button>

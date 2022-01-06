@@ -1,13 +1,14 @@
 import { useReducer } from "react";
 import projectContext from "./projectContext";
-import reducer from "./projectReducer";
+import ProjectReducer from "./projectReducer";
 import { v4 } from 'uuid';
 import {
     PROJECT_FORM,
     GET_PROJECTS,
     ADD_PROJECT,
-    FORM_ERROR,
-    CURRENT_PROJECT
+    PROJECT_ERROR,
+    CURRENT_PROJECT,
+    DELETE_PROJECT
 } from '../../types';
 
 const ProjectState = props => {
@@ -27,7 +28,7 @@ const ProjectState = props => {
     }
 
     // Dispatch para ejecutar las acciones
-    const [ state, dispatch ] = useReducer(reducer, initialState);
+    const [ state, dispatch ] = useReducer(ProjectReducer, initialState);
 
     // Funciones para el CRUD
     const showForm = () => {
@@ -54,13 +55,20 @@ const ProjectState = props => {
 
     const showError = () => {
         dispatch({
-            type: FORM_ERROR
+            type: PROJECT_ERROR
         })
     }
 
     const selectProject = project => {
         dispatch({
             type: CURRENT_PROJECT,
+            payload: project
+        })
+    }
+
+    const deleteProject = project => {
+        dispatch({
+            type: DELETE_PROJECT,
             payload: project
         })
     }
@@ -77,7 +85,8 @@ const ProjectState = props => {
                 getProjects,
                 addProject,
                 showError,
-                selectProject
+                selectProject,
+                deleteProject
             }}
         >
             {props.children}
