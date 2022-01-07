@@ -7,11 +7,21 @@ const Task = ({task}) => {
     const { name, state } = task;
 
     const { project } = useContext(projectContext);
-    const { deleteTask, getProjectTasks } = useContext(TaskContext);
+    const { deleteTask, getProjectTasks, changeTaskState, selectTask } = useContext(TaskContext);
 
     const handleClickDelete = () => {
         deleteTask(task.id);
         getProjectTasks(project.id);
+    }
+
+    const handleClickState = () => {
+        task.state = !task.state;
+        
+        changeTaskState(task);
+    }
+
+    const handleClickEdit = () => {
+        selectTask(task);
     }
 
     return (
@@ -24,6 +34,7 @@ const Task = ({task}) => {
                         <button
                             type="button"
                             className="completo"
+                            onClick={handleClickState}
                         >
                             Completed
                         </button>
@@ -31,6 +42,7 @@ const Task = ({task}) => {
                     <button
                         type="button"
                         className="incompleto"
+                        onClick={handleClickState}
                     >
                         Uncompleted
                     </button>
@@ -41,6 +53,7 @@ const Task = ({task}) => {
                 <button
                     type="button"
                     className="btn btn-primario"
+                    onClick={handleClickEdit}
                 >
                     Edit
                 </button>

@@ -5,7 +5,10 @@ import {
     PROJECT_TASKS,
     ADD_TASK,
     TASK_ERROR,
-    DELETE_TASK
+    DELETE_TASK,
+    TASK_STATE,
+    CURRENT_TASK,
+    UPDATE_TASK
 } from "../../types";
 import { v4 } from 'uuid';
 
@@ -26,7 +29,8 @@ const TaskState = props => {
             { id: v4(), name: 'Choose Hosting', state: true, projectId: 3 }
         ],
         projectTasks: null,
-        taskError: false
+        taskError: false,
+        currentTask: null
     }
 
     const [ state, dispatch ] = useReducer(TaskReducer, initialState);
@@ -58,17 +62,42 @@ const TaskState = props => {
         })
     }
 
+    const changeTaskState = task => {
+        dispatch({
+            type: TASK_STATE,
+            payload: task
+        })
+    }
+
+    const selectTask = task => {
+        dispatch({
+            type: CURRENT_TASK,
+            payload: task
+        })
+    }
+
+    const updateTask = task => {
+        dispatch({
+            type: UPDATE_TASK,
+            payload: task
+        })
+    }
+
     return (
         <TaskContext.Provider
             value={{
                 tasks: state.tasks,
                 projectTasks: state.projectTasks,
                 taskError: state.taskError,
+                currentTask: state.currentTask,
 
                 getProjectTasks,
                 addTask,
                 validateTask,
-                deleteTask
+                deleteTask,
+                changeTaskState,
+                selectTask,
+                updateTask
             }}
         >
             {props.children}

@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import projectContext from '../../context/projects/projectContext';
 import TaskContext from '../../context/tasks/taskContext';
 import { v4 } from 'uuid';
@@ -6,7 +6,7 @@ import { v4 } from 'uuid';
 const TaskForm = () => {
 
     const { project } = useContext(projectContext);
-    const { taskError, addTask, validateTask, getProjectTasks } = useContext(TaskContext);
+    const { taskError, addTask, currentTask, validateTask, getProjectTasks, updateTask } = useContext(TaskContext);
 
     // State para la nueva tarea
     const [ task, setTask ] = useState({
@@ -14,6 +14,10 @@ const TaskForm = () => {
     });
 
     const { name } = task;
+
+    useEffect(() => {
+        if (currentTask) setTask(currentTask);
+    }, [currentTask]);
 
     if (!project) return null;
 
@@ -26,13 +30,15 @@ const TaskForm = () => {
             return;
         }
 
-        // Pasar la validación
-
-        // Agregar nueva tarea al state de tareas
-        task.id = v4();
-        task.projectId = project.id;
-        task.state = false;
-        addTask(task);
+        if (currentTask === null) {
+            // Agregar nueva tarea al state de tareas
+            task.id = v4();
+            task.projectId = project.id;
+            task.state = false;
+            addTask(task);
+        } else {
+            updateTask(task);
+        }
 
         // Reiniciar form
         setTask({
@@ -70,7 +76,7 @@ const TaskForm = () => {
                     <input
                         type="submit"
                         className="btn btn-primario btn-block btn-submit"
-                        value="Add Task"
+                        value={ (!currentTask) ? "Add Task" : "Edit Task" }
                     />
                 </div>
             </form>
