@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import projectContext from '../../context/projects/projectContext';
 import TaskContext from '../../context/tasks/taskContext';
-import { v4 } from 'uuid';
 
 const TaskForm = () => {
 
@@ -32,9 +31,7 @@ const TaskForm = () => {
 
         if (currentTask === null) {
             // Agregar nueva tarea al state de tareas
-            task.id = v4();
-            task.projectId = project.id;
-            task.state = false;
+            task.project = project._id;
             addTask(task);
         } else {
             updateTask(task);
@@ -46,7 +43,7 @@ const TaskForm = () => {
         });
 
         // Obtener tareas del proyecto actual con la nueva tarea
-        getProjectTasks(project.id);
+        getProjectTasks(project._id);
     }
 
     const handleChange = e => {

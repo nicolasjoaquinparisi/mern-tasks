@@ -28,11 +28,12 @@ const TasksList = () => {
                     {
                         projectTasks.map(task => (
                             <CSSTransition
-                                key={task.id}
+                                key={task._id}
                                 timeout={200}
                                 classNames="tarea"
                             >
                                 <Task
+                                    key={task._id}
                                     task={task}
                                 />
                             </CSSTransition>

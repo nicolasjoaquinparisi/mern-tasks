@@ -4,7 +4,8 @@ import {
     ADD_PROJECT,
     PROJECT_ERROR,
     CURRENT_PROJECT,
-    DELETE_PROJECT
+    DELETE_PROJECT,
+    DELETE_ERROR
 } from "../../types";
 
 const ProjectReducer = (state, action) => {
@@ -41,6 +42,11 @@ const ProjectReducer = (state, action) => {
                 ...state,
                 projects: state.projects.filter(project => project._id !== action.payload),
                 project: null
+            }
+        case DELETE_ERROR:
+            return {
+                ...state,
+                message: action.payload
             }
         default:
             return state;

@@ -7,17 +7,17 @@ const Task = ({task}) => {
     const { name, state } = task;
 
     const { project } = useContext(projectContext);
-    const { deleteTask, getProjectTasks, changeTaskState, selectTask } = useContext(TaskContext);
+    const { deleteTask, getProjectTasks, updateTask, selectTask } = useContext(TaskContext);
 
     const handleClickDelete = () => {
-        deleteTask(task.id);
-        getProjectTasks(project.id);
+        deleteTask(task._id, project._id);
+        getProjectTasks(project._id);
     }
 
     const handleClickState = () => {
         task.state = !task.state;
         
-        changeTaskState(task);
+        updateTask(task);
     }
 
     const handleClickEdit = () => {

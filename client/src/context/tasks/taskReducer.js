@@ -3,7 +3,6 @@ import {
     PROJECT_TASKS,
     TASK_ERROR,
     DELETE_TASK,
-    TASK_STATE,
     CURRENT_TASK,
     UPDATE_TASK
 } from "../../types";
@@ -13,12 +12,12 @@ const TaskReducer = (state, action) => {
         case PROJECT_TASKS:
             return {
                 ...state,
-                projectTasks: state.tasks.filter(task => task.projectId === action.payload)
+                projectTasks: action.payload
             }
         case ADD_TASK:
             return {
                 ...state,
-                tasks: [ action.payload, ...state.tasks ],
+                projectTasks: [ action.payload, ...state.projectTasks ],
                 taskError: false
             }
         case TASK_ERROR:
@@ -29,12 +28,7 @@ const TaskReducer = (state, action) => {
         case DELETE_TASK:
             return {
                 ...state,
-                tasks: state.tasks.filter(task => task.id !== action.payload)
-            }
-        case TASK_STATE:
-            return {
-                ...state,
-                tasks: state.projectTasks.map(task => task.id === action.payload.id ? action.payload : task)
+                projectTasks: state.projectTasks.filter(task => task._id !== action.payload)
             }
         case CURRENT_TASK:
             return {
@@ -44,7 +38,7 @@ const TaskReducer = (state, action) => {
         case UPDATE_TASK:
             return {
                 ...state,
-                tasks: state.projectTasks.map(task => task.id === action.payload.id ? action.payload : task),
+                projectTasks: state.projectTasks.map(task => task._id === action.payload._id ? action.payload : task),
                 currentTask: null
             }
         default:

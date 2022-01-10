@@ -41,10 +41,11 @@ exports.createTask = async (req, res) => {
 exports.getTasks = async (req, res) => {
     try {
         // Extraer proyecto y determinar si existe
-        const { project } = req.body;
+        const { project } = req.query;
 
         // Se determina si el proyecto existe o no
         const reqProject = await Project.findById(project);
+
         if (!reqProject) {
             res.status(404).send('Project not found');
         }
@@ -53,9 +54,9 @@ exports.getTasks = async (req, res) => {
         if (reqProject.creator.toString() !== req.user) {
             return res.status(401).send('Forbidden access');
         }
-
+        
         // Obtener tareas por proyecto
-        const tasks = await Task.find({ project });
+        const tasks = await Task.find({ project }).sort({created: -1});
         res.json({ tasks });
     }
     catch (error) {
@@ -92,8 +93,8 @@ exports.updateTask = async (req, res) => {
 
         const newTask = {};
 
-        if (name) newTask.name = name;
-        if (state) newTask.state = state;
+        newTask.name = name;
+        newTask.state = state;
 
         // Guardar tarea
         task = await Task.findOneAndUpdate({_id: req.params.id}, newTask, {new: true});
@@ -109,8 +110,8 @@ exports.updateTask = async (req, res) => {
 exports.deleteTask = async (req, res) => {
     try {
         // Extraer proyecto y determinar si existe
-        const { project } = req.body;
-
+        const { project } = req.query;
+        
         // Determina si la tarea existe o no
         let task = await Task.findById(req.params.id);
         if (!task) {

@@ -7,7 +7,8 @@ import {
     ADD_PROJECT,
     PROJECT_ERROR,
     CURRENT_PROJECT,
-    DELETE_PROJECT
+    DELETE_PROJECT,
+    DELETE_ERROR
 } from '../../types';
 import axiosClient from '../../config/axios';
 
@@ -18,7 +19,8 @@ const ProjectState = props => {
         projects: [],
         form: false,
         formError: false,
-        project: null
+        project: null,
+        message: null
     }
 
     // Dispatch para ejecutar las acciones
@@ -78,7 +80,16 @@ const ProjectState = props => {
                 payload: projectId
             })
         } catch (error) {
-            console.log(error);
+
+            const alert = {
+                message: 'There was an error',
+                category: 'alerta-error'
+            };
+
+            dispatch({
+                type: DELETE_ERROR,
+                payload: alert
+            })
         }
     }
 
@@ -89,6 +100,7 @@ const ProjectState = props => {
                 form: state.form,
                 formError: state.formError,
                 project: state.project,
+                message: state.message,
 
                 showForm,
                 getProjects,
