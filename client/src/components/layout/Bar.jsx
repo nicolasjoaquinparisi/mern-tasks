@@ -1,9 +1,12 @@
 import { useEffect, useContext } from "react";
+import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../context/auth/authContext';
 
 const Bar = () => {
 
     const { user, getAuthenticatedUser, logOut } = useContext(AuthContext);
+
+    const navigation = useNavigate();
 
     useEffect(() => {
         getAuthenticatedUser();
@@ -11,6 +14,7 @@ const Bar = () => {
 
     const handleClickLogout = () => {
         logOut();
+        navigation('/');
     }
 
     return (
