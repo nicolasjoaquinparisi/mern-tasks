@@ -1,7 +1,28 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import AlertContext from '../../context/alerts/alertContext';
+import AuthContext from '../../context/auth/authContext';
 
 const NewAccount = () => {
+
+    const navigate = useNavigate();
+
+    const { alert, showAlert } = useContext(AlertContext);
+
+    const { message, autenticated, signIn }= useContext(AuthContext);
+
+    // En caso de que el usuario se haya autenticado o registrado o sea un registro duplicado
+    useEffect(() => {
+        
+        if (autenticated) {
+            navigate('/projects');
+        }
+
+        if (message) {
+            showAlert(message.msg, message.category);
+        }
+
+    }, [message, autenticated, navigate]);
     
     const [ user, setUser ] = useState({
         name: '',
@@ -21,10 +42,34 @@ const NewAccount = () => {
 
     const handleSubmit = e => {
         e.preventDefault();
+        
+        // Validar que no haya campos vacios
+        if (name.trim() === '' || email.trim() === '' || password.trim() === '' || confirm.trim() === '') {
+            showAlert('You must complete all fields', 'alerta-error');
+            return;
+        }
+
+        // Password mínimo de 6 caracteres
+        if (password.length < 6) {
+            showAlert('The password must contain 6 characters at least', 'alerta-error');
+            return;
+        }
+
+        // Los 2 passwords deben ser iguales
+        if (password !== confirm) {
+            showAlert('The passwords are differents', 'alerta-error');
+            return;
+        }
+
+        // Pasarlo al action
+        signIn({ name, email, password });
     }
 
     return (
         <div className="form-usuario">
+            {
+                (alert) ? ( <div className={`alerta ${alert.category}`}>{alert.msg}</div>) : null
+            }
             <div className="contenedor-form sombra-dark">
                 <h1>New Account</h1>
                 <form

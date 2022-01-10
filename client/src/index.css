@@ -356,3 +356,7 @@ aside  {
 .btn-eliminar {
   background-color: var(--blanco);
 }
+
+.cerrar-sesion {
+  color: white;
+}
