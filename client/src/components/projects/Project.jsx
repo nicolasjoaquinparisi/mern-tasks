@@ -11,7 +11,7 @@ const Project = ({project}) => {
 
     const handleClick = () => {
         selectProject(project);
-        getProjectTasks(project.id);
+        getProjectTasks(project._id);
     }
 
     return (

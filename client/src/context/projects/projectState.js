@@ -1,7 +1,6 @@
 import { useReducer } from "react";
 import projectContext from "./projectContext";
 import ProjectReducer from "./projectReducer";
-import { v4 } from 'uuid';
 import {
     PROJECT_FORM,
     GET_PROJECTS,
@@ -10,14 +9,9 @@ import {
     CURRENT_PROJECT,
     DELETE_PROJECT
 } from '../../types';
+import axiosClient from '../../config/axios';
 
 const ProjectState = props => {
-    
-    const projects = [
-        { id: 1, name: 'E-Commerce' },
-        { id: 2, name: 'Reactive Dungeon' },
-        { id: 3, name: 'Reactive Cookie' }
-    ];
 
     // Estado inicial de la aplicación
     const initialState = {
@@ -37,20 +31,29 @@ const ProjectState = props => {
         })
     }
 
-    const getProjects = () => {
-        dispatch({
-            type: GET_PROJECTS,
-            payload: projects
-        })
+    const getProjects = async () => {
+        try {
+            const response = await axiosClient.get('/api/projects');
+
+            dispatch({
+                type: GET_PROJECTS,
+                payload: response.data.projects
+            });
+        } catch (error) {
+            console.log(error);
+        }
     }
 
-    const addProject = project => {
-        project.id = v4();
-
-        dispatch({
-            type: ADD_PROJECT,
-            payload: project
-        })
+    const addProject = async project => {
+        try {
+            const response = await axiosClient.post('/api/projects', project);
+            dispatch({
+                type: ADD_PROJECT,
+                payload: response.data
+            })
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const showError = () => {
@@ -66,11 +69,17 @@ const ProjectState = props => {
         })
     }
 
-    const deleteProject = project => {
-        dispatch({
-            type: DELETE_PROJECT,
-            payload: project
-        })
+    const deleteProject = async projectId => {
+        try {
+            axiosClient.delete(`/api/projects/${projectId}`);
+
+            dispatch({
+                type: DELETE_PROJECT,
+                payload: projectId
+            })
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (

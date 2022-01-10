@@ -12,7 +12,7 @@ const TasksList = () => {
     if (!project) return <h2>Select a Project</h2>
 
     const handleClick = () => {
-        deleteProject(project.id);
+        deleteProject(project._id);
     }
 
     return (
